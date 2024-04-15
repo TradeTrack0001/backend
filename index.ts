@@ -1,9 +1,15 @@
 import express from "express";
 import inventoryRouter from "./routes/inventory.js";
 
-const app = express();
-const PORT = 3000;
+import ApiRouter from "./routes/api.js"; 
 
+const app = express();
+const PORT = 2000;
+app.use(express.json());
+
+app.use(express.urlencoded({ extended: true }));
+
+app.use("/api", ApiRouter);
 app.use("/inventory", inventoryRouter);
 
 app.get("/", (req, res) => {
