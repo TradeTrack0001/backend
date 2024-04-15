@@ -1,15 +1,11 @@
 import { Router } from "express";
-import { PrismaClient } from "../node_modules/.prisma/client/index";
-
-const prisma = new PrismaClient();
+import prisma from "../data/prisma";
 
 const router = Router();
 
 const products: Object[] = [];
 
 router.post("/add_product", (req, res) => {
-  prisma.$connect();
-
     console.log("Connect to server successfully");
     console.log(req.body);
     const pdata = req.body;
