@@ -9,17 +9,19 @@ router.post("/add_product", (req, res) => {
     console.log("Connect to server successfully");
     console.log(req.body);
     const pdata = req.body;
+    let isTrue = false;
+    console.log(pdata.name);
     prisma.inventory.create({
       data: {
-        itemName: pdata.body.name,
-        itemSize: pdata.body.size,
-        itemDescription: pdata.body.description,
-        checkInDate: pdata.body.checkInDate,
-        location: pdata.body.location,
-        itemStatus:pdata.body.status,
-        itemQuantity: pdata.body.quantity,
-        itemID: pdata.body.id,
-        type: pdata.body.type,
+        itemName: pdata.name,
+        itemSize: pdata.size,
+        itemDescription: pdata.description,
+        checkInDate: pdata.checkInDate,
+        location: pdata.location,
+        itemStatus:isTrue,
+        itemQuantity: parseInt(pdata.quantity),
+        itemID: parseInt(pdata.id),
+        type: pdata.type,
       },
     });
     products.push(pdata);
