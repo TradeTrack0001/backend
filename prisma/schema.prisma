@@ -79,6 +79,6 @@ model Inventory {
   itemSize        String
   type            String
   checkInDate     String
-  checkOutDate    String
+  checkOutDate    String  @default("N/A")
   location        String
 }
