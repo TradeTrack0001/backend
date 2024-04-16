@@ -33,9 +33,9 @@ router.post("/add_product", async (req, res) => {
     });
   });
   
-  router.get("/get_products", (req, res) => {
+  router.get("/get_products", async (req, res) => {
     prisma.$connect();
-    prisma.inventory.findMany().then((data) => {
+    await prisma.inventory.findMany().then((data) => {
       console.log(data);
       if (data.length > 0) {
       res.status(200).json({
