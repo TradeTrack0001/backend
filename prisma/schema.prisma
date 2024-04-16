@@ -70,7 +70,7 @@ datasource db {
 //   isFlexible Boolean
 // }
 
-model Inventory {
+model inventory {
   itemID          Int     @id
   itemName        String
   itemDescription String
