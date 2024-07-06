@@ -18,4 +18,19 @@ model inventory {
   checkInDate     String
   checkOutDate    String  @default("N/A")
   location        String
+  logs            logs[]
+}
+
+model employee {
+  employeeID Int    @id
+  password   String
+  logs       logs[]
+}
+
+model logs {
+  logId      Int       @id
+  employee   employee  @relation(fields: [employeeId], references: [employeeID])
+  employeeId Int
+  inventory  inventory @relation(fields: [itemID], references: [itemID])
+  itemID     Int
 }
