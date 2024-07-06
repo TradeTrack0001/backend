@@ -10,18 +10,18 @@ router.post("/add_product", async (req, res) => {
     console.log(req.body);
     const pdata = req.body;
     let isTrue = false; 
-    console.log(pdata.name);
+    console.log(pdata[0].itemName);
     const newInventory = await prisma.inventory.create({
       data: {
-        itemName: pdata.name,
-        itemSize: pdata.size,
-        itemDescription: pdata.description,
-        checkInDate: pdata.checkInDate,
-        location: pdata.location,
-        itemStatus:isTrue,
-        itemQuantity: parseInt(pdata.quantity),
-        itemID: parseInt(pdata.id),
-        type: pdata.type,
+        itemName: pdata[0].itemName,
+        itemSize: pdata[0].itemSize,
+        itemDescription: pdata[0].itemDescription,
+        checkInDate: pdata[0].checkInDate,
+        location: pdata[0].location,
+        itemStatus:pdata[0].itemStatus,
+        itemQuantity: parseInt(pdata[0].itemQuantity),
+        itemID: parseInt(pdata[0].itemID),
+        type: pdata[0].type,
       },
     });
 
