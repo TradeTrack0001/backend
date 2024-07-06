@@ -9,7 +9,7 @@ router.post("/add_product", async (req, res) => {
     console.log("Connect to server successfully");
     console.log(req.body);
     const pdata = req.body;
-    let isTrue = false;
+    let isTrue = false; 
     console.log(pdata.name);
     const newInventory = await prisma.inventory.create({
       data: {
@@ -34,6 +34,7 @@ router.post("/add_product", async (req, res) => {
   });
   
   router.get("/get_products", async (req, res) => {
+    console.log("Connect to server successfully");
     prisma.$connect();
     await prisma.inventory.findMany().then((data) => {
       console.log(data);
@@ -183,3 +184,4 @@ router.post("/add_product", async (req, res) => {
   //   // products.push(pdata);
   // });
 export default router;
+
