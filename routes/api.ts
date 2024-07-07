@@ -80,23 +80,28 @@ router.post("/add_product", async (req, res) => {
 
   router.put("/update_product/:id", async (req, res) => {
     const id = parseInt(req.params.id);
+    console.log("Connect to server successfully and id is:" + id);
     const pdata = req.body;
-    console.log(id);
+    console.log(id); 
     const inventory = await prisma.inventory.update({
       where: {
-        itemID: id,
+        itemID: id, 
       },
       data: {
         itemName: pdata.name,
-        itemSize: pdata.size,
-        itemDescription: pdata.description,
-        checkInDate: pdata.checkInDate,
+        checkInDate: pdata?.checkInDate,
+        checkOutDate: pdata?.checkOutDate,
         location: pdata.location,
-        itemStatus: pdata.status,
-        itemQuantity: parseInt(pdata.quantity),
+        itemQuantity: parseInt(pdata.newQuantity),
         type: pdata.type,
       },
+
     });
+    const inventoryItem = await prisma.inventory.findUnique({
+      where: { itemID: id }
+  });
+  
+  console.log('Inventory Item from DB:', inventoryItem);
     if(inventory){
       res.status(200).json({
         status_code: 200,
@@ -151,37 +156,5 @@ router.post("/add_product", async (req, res) => {
     }
   });
 
-  // router.post("/test_add", async (req, res) => {
-  //   // prisma.$connect();
-  //   console.log("Connect to server successfully");
-  //   // console.log(req.body);
-  //   // const pdata = req.body;
-  //   let isTrue = false;
-  //   // console.log(pdata.name);
-  //   try{
-  //   const newInventory = await prisma.inventory.create({
-  //     data: {
-  //       itemName: "pdata.name",
-  //       itemSize: "pdata.size",
-  //       itemDescription: "pdata.description",
-  //       checkInDate: "pdata.checkInDate",
-  //       location: "pdata.location",
-  //       itemStatus:true,
-  //       itemQuantity: 100,
-  //       itemID:102,
-  //       type: "pdata.type",
-  //     },
-  //   });
-  //   res.status(200).json({
-  //     status_code: 200,
-  //     message: "Product created",
-  //     inventory: newInventory,
-  //   });
-
-  // }catch(err){
-  //   console.log(err);
-  // }
-  //   // products.push(pdata);
-  // });
 export default router;
 

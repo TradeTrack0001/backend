@@ -22,15 +22,20 @@ model inventory {
 }
 
 model employee {
-  employeeID Int    @id
-  password   String
-  logs       logs[]
+  employeeID   Int    @id
+  Name         String
+  Email        String
+  password     String
+  CompanyEmail String
+  logs         logs[]
 }
 
 model logs {
-  logId      Int       @id
-  employee   employee  @relation(fields: [employeeId], references: [employeeID])
-  employeeId Int
-  inventory  inventory @relation(fields: [itemID], references: [itemID])
-  itemID     Int
+  logId         Int       @id
+  employee      employee  @relation(fields: [employeeId], references: [employeeID])
+  employeeId    Int
+  inventory     inventory @relation(fields: [itemID], references: [itemID])
+  itemID        Int
+  QuantityTook  Int
+  QuantityAdded Int
 }
