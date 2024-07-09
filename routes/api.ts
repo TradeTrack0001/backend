@@ -6,6 +6,7 @@ const router = Router();
 const products: Object[] = [];
 
 router.post("/add_product", async (req, res) => {
+  try {
     console.log("Connect to server successfully");
     console.log(req.body);
     const pdata = req.body;
