@@ -11,6 +11,7 @@ router.post("/add_product", async (req, res) => {
     const pdata = req.body;
     let isTrue = false;
     console.log(pdata.name);
+    try {
     const newInventory = await prisma.inventory.create({
       data: {
         itemName: pdata.name,
@@ -31,6 +32,10 @@ router.post("/add_product", async (req, res) => {
       message: "Product created",
       inventory: newInventory,
     });
+  } catch(err){
+    console.log(err);
+    res.sendStatus(500);
+  }
   });
   
   router.get("/get_products", async (req, res) => {
