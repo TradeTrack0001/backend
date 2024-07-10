@@ -19,16 +19,22 @@ const jwtMiddleware = expressjwt({ secret: SECRET_KEY, algorithms: ['HS256'] });
 // Register route
 router.post('/register', async (req: Request, res: Response) => {
   const { email, password } = req.body;
+  // Validate input
+  console.log(password)
+  if (!email || !password) {
+    return res.status(400).send('Email and password are required');
+  }
   const hashedPassword = await bcrypt.hash(password, 10);
   try {
     const user = await prisma.user.create({
       data: {
-        email,
+        email: email,
         password: hashedPassword,
       },
     });
     res.status(201).send('User registered');
   } catch (error) {
+    console.error(error);
     res.status(400).send('Error registering user');
   }
 });
@@ -36,7 +42,14 @@ router.post('/register', async (req: Request, res: Response) => {
 // Login route
 router.post('/login', async (req: Request, res: Response) => {
   const { email, password } = req.body;
-  const user = await prisma.user.findUnique({ where: { email } });
+  console.log("logging in")
+  let user = null;
+  try {
+  user = await prisma.user.findUnique({ where: { email } });
+  }
+  catch (error) {
+    console.log(error);
+  }
   if (user && await bcrypt.compare(password, user.password)) {
     const token = jwt.sign({ email: user.email }, SECRET_KEY, { expiresIn: '1h' });
     res.json({ token });

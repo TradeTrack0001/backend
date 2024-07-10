@@ -4,6 +4,7 @@ import ApiRouter from "./routes/api.js";
 import prisma from "./data/prisma.js";
 import cors from "cors";
 import authRouter from "./routes/auth.js";
+import bodyParser from "body-parser";
 const app = express();
 const PORT = 2000;
 
@@ -12,7 +13,8 @@ const PORT = 2000;
 app.use(express.json());
 app.use(cors());
 app.use(express.urlencoded({ extended: true }));
-
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use("/api", ApiRouter);
 // app.use("/inventory", inventoryRouter);
 // Use the auth router for all /auth routes
