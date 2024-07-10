@@ -24,7 +24,7 @@ model inventory {
 model employee {
   employeeID   Int    @id
   Name         String
-  Email        String
+  Email        String @unique
   password     String
   CompanyEmail String
   logs         logs[]
@@ -38,4 +38,10 @@ model logs {
   itemID        Int
   QuantityTook  Int
   QuantityAdded Int
+}
+
+model User {
+  id       Int    @id @default(autoincrement())
+  email    String @unique
+  password String
 }

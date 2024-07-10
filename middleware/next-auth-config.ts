@@ -1,22 +1,16 @@
 import { NextAuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import bcrypt from 'bcryptjs';
+import { PrismaClient } from '@prisma/client';
 import { JWT } from 'next-auth/jwt';
 import { Session, User as NextAuthUser } from 'next-auth';
 
-interface User {
-  id: string;
-  email: string;
-  password: string;
-}
+const prisma = new PrismaClient();
 
 interface Credentials {
   email: string;
   password: string;
 }
-
-// A simple in-memory store for users (use a real database in production)
-const users: User[] = [];
 
 const nextAuthConfig: NextAuthOptions = {
   providers: [
@@ -27,9 +21,16 @@ const nextAuthConfig: NextAuthOptions = {
         password: { label: "Password", type: "password" }
       },
       authorize: async (credentials: Credentials | undefined) => {
-        const user = users.find(user => user.email === credentials?.email);
-        if (user && bcrypt.compareSync(credentials?.password || '', user.password)) {
-          return { id: user.id, email: user.email };
+        if (!credentials?.email || !credentials.password) {
+          return null;
+        }
+
+        const user = await prisma.employee.findUnique({
+          where: { Email: credentials.email }
+        });
+
+        if (user && bcrypt.compareSync(credentials.password, user.password)) {
+          return { id: user.employeeID.toString(), email: user.Email };
         } else {
           return null;
         }
@@ -47,9 +48,9 @@ const nextAuthConfig: NextAuthOptions = {
     strategy: 'jwt' // Use strategy to specify session type
   },
   callbacks: {
-    async jwt({ token, user }: { token: JWT; user?: User | NextAuthUser }) {
+    async jwt({ token, user }: { token: JWT; user?: NextAuthUser }) {
       if (user) {
-        token.id = user.id;
+        token.id = (user as any).id; // Cast to any to avoid TypeScript error
       }
       return token;
     },
