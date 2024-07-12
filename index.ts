@@ -20,10 +20,12 @@ app.use("/api", ApiRouter);
 // Use the auth router for all /auth routes
 app.use('/auth', authRouter);
 app.get("/", (req, res) => {
-  res.send("Hello World");
+  res.send("Hello, World!");
 });
 
-app.listen(PORT, () => {
+const server = app.listen(PORT, () => {
   prisma.$connect();
   console.log(`Server is running on port ${PORT}`);
 });
+
+export { app, server, prisma };
