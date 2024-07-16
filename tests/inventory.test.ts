@@ -2,7 +2,14 @@
 import request from 'supertest';
 import {app, server, prisma} from '../index'; // Adjust the path as necessary
 
+beforeAll(() => {
+  jest.spyOn(console, 'log').mockImplementation(() => {});
+  jest.spyOn(console, 'warn').mockImplementation(() => {});
+  jest.spyOn(console, 'error').mockImplementation(() => {});
+});
+
 afterAll(async () => {
+  jest.restoreAllMocks();
   server.close();
   await prisma.$disconnect();
 });
