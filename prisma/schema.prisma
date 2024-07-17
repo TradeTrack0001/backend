@@ -43,17 +43,20 @@ model logs {
 }
 
 model User {
-  id         Int             @id @default(autoincrement())
-  email      String          @unique
-  password   String
-  workspaces UserWorkspace[]
+  id                 Int             @id @default(autoincrement())
+  email              String          @unique
+  password           String
+  workspaces         UserWorkspace[]
+  currentWorkspaceId Int?
+  currentWorkspace   Workspace?      @relation(fields: [currentWorkspaceId], references: [id], name: "CurrentWorkspace")
 }
 
 model Workspace {
-  id             Int             @id @default(autoincrement())
-  name           String
-  userWorkspaces UserWorkspace[]
-  inventories    inventory[]
+  id                    Int             @id @default(autoincrement())
+  name                  String
+  userWorkspaces        UserWorkspace[]
+  inventories           inventory[]
+  currentWorkspaceUsers User[]          @relation(name: "CurrentWorkspace")
 }
 
 model UserWorkspace {
