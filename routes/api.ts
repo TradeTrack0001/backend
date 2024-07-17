@@ -22,6 +22,7 @@ router.post("/add_product", async (req, res) => {
         itemQuantity: parseInt(pdata.itemQuantity),
         itemID: parseInt(pdata.itemID),
         type: pdata.type,
+        workspaceId: pdata.workspaceId,
       },
     });
 
