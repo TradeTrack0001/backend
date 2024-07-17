@@ -195,7 +195,42 @@ router.post("/add_product", async (req, res) => {
         inventory: [],
       });
     }
-  });
+  }
+  );
+
+  router.put("/checkout/:id", async (req, res) => {
+    const id = parseInt(req.params.id);
+    const pdata = req.body;
+    console.log("This is the data: ", pdata);
+    const inventory = await prisma.inventory.findUnique({
+      where: {
+        itemID: id,
+      },
+    });
+    if(inventory){
+      const newQuantity = inventory.itemQuantity - parseInt(pdata.checkOutQuantity);
+      await prisma.inventory.update({
+        where: {  
+          itemID: id,
+        },
+        data: {
+          itemQuantity: newQuantity
+        },
+      }); 
+      res.status(200).json({
+        status_code: 200,
+        message: "Product checked out",
+        inventory: inventory,
+      });
+    } else {
+      res.status(200).json({
+        status_code: 200,
+        message: "Product not found",
+        inventory: [],
+      });
+    }
+  }
+);
 
 export default router;
 
