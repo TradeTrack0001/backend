@@ -8,7 +8,7 @@ datasource db {
 }
 
 model inventory {
-  itemID          Int     @id
+  itemID          Int       @id
   itemName        String
   itemDescription String
   itemQuantity    Int
@@ -16,9 +16,11 @@ model inventory {
   itemSize        String
   type            String
   checkInDate     String
-  checkOutDate    String  @default("N/A")
+  checkOutDate    String    @default("N/A")
   location        String
   logs            logs[]
+  workspaceId     Int
+  workspace       Workspace @relation(fields: [workspaceId], references: [id])
 }
 
 model employee {
@@ -51,6 +53,7 @@ model Workspace {
   id             Int             @id @default(autoincrement())
   name           String
   userWorkspaces UserWorkspace[]
+  inventories    inventory[]
 }
 
 model UserWorkspace {
