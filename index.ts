@@ -5,6 +5,7 @@ import prisma from "./data/prisma.js";
 import cors from "cors";
 import authRouter from "./routes/auth.js";
 import bodyParser from "body-parser";
+import workspaceRouter from "./routes/workspace.js";
 const app = express();
 const PORT = 2000;
 
@@ -19,6 +20,7 @@ app.use("/api", ApiRouter);
 // app.use("/inventory", inventoryRouter);
 // Use the auth router for all /auth routes
 app.use('/auth', authRouter);
+app.use ("/workspace", workspaceRouter);
 app.get("/", (req, res) => {
   res.send("Hello, World!");
 });
