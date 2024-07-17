@@ -2,7 +2,7 @@ import express, { Request, Response, NextFunction } from 'express';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { PrismaClient } from '@prisma/client';
-import { expressjwt, GetVerificationKey } from 'express-jwt';
+import { expressjwt } from 'express-jwt';
 
 const prisma = new PrismaClient();
 const router = express.Router();
@@ -20,7 +20,6 @@ const jwtMiddleware = expressjwt({ secret: SECRET_KEY, algorithms: ['HS256'] });
 router.post('/register', async (req: Request, res: Response) => {
   const { email, password } = req.body;
   // Validate input
-  console.log(password)
   if (!email || !password) {
     return res.status(400).send('Email and password are required');
   }
@@ -42,16 +41,15 @@ router.post('/register', async (req: Request, res: Response) => {
 // Login route
 router.post('/login', async (req: Request, res: Response) => {
   const { email, password } = req.body;
-  console.log("logging in")
   let user = null;
   try {
-  user = await prisma.user.findUnique({ where: { email } });
-  }
-  catch (error) {
+    user = await prisma.user.findUnique({ where: { email } });
+  } catch (error) {
     console.log(error);
   }
   if (user && await bcrypt.compare(password, user.password)) {
-    const token = jwt.sign({ email: user.email }, SECRET_KEY, { expiresIn: '1h' });
+    // Include user.id in the JWT token
+    const token = jwt.sign({ id: user.id, email: user.email }, SECRET_KEY, { expiresIn: '1h' });
     res.json({ token });
   } else {
     res.status(401).send('Invalid email or password');
