@@ -7,22 +7,21 @@ const products: Object[] = [];
 
 router.post("/add_product", async (req, res) => {
   try {
-    console.log("Connect to server successfully");
-    console.log(req.body);
+
     const pdata = req.body;
     let isTrue = false; 
-    console.log(pdata[0].itemName);
+
     const newInventory = await prisma.inventory.create({
       data: {
-        itemName: pdata[0].itemName,
-        itemSize: pdata[0].itemSize,
-        itemDescription: pdata[0].itemDescription,
-        checkInDate: pdata[0].checkInDate,
-        location: pdata[0].location,
-        itemStatus:pdata[0].itemStatus,
-        itemQuantity: parseInt(pdata[0].itemQuantity),
-        itemID: parseInt(pdata[0].itemID),
-        type: pdata[0].type,
+        itemName: pdata.itemName,
+        itemSize: pdata.itemSize,
+        itemDescription: pdata.itemDescription,
+        checkInDate: pdata.checkInDate,
+        location: pdata.location,
+        itemStatus:pdata.itemStatus,
+        itemQuantity: parseInt(pdata.itemQuantity),
+        itemID: parseInt(pdata.itemID),
+        type: pdata.type,
       },
     });
 
@@ -39,10 +38,10 @@ router.post("/add_product", async (req, res) => {
   });
   
   router.get("/get_products", async (req, res) => {
-    console.log("Connect to server successfully");
+
     prisma.$connect();
     await prisma.inventory.findMany().then((data) => {
-      console.log(data);
+
       if (data.length > 0) {
       res.status(200).json({
         status_code: 200,
@@ -62,7 +61,7 @@ router.post("/add_product", async (req, res) => {
   );
   router.delete("/delete_product/:id", async (req, res) => {
     const id = parseInt(req.params.id);
-    console.log(id);
+
     const inventory = await prisma.inventory.delete({
       where: {
         itemID: id,
@@ -85,19 +84,21 @@ router.post("/add_product", async (req, res) => {
 
   router.put("/update_product/:id", async (req, res) => {
     const id = parseInt(req.params.id);
-    console.log("Connect to server successfully and id is:" + id);
+
     const pdata = req.body;
-    console.log(id); 
+
     const inventory = await prisma.inventory.update({
       where: {
         itemID: id, 
       },
       data: {
         itemName: pdata.name,
+        itemDescription: pdata?.description,
+        itemSize: pdata?.itemSize,
         checkInDate: pdata?.checkInDate,
         checkOutDate: pdata?.checkOutDate,
         location: pdata.location,
-        itemQuantity: parseInt(pdata.newQuantity),
+        itemQuantity: parseInt(pdata.itemQuantity),
         type: pdata.type,
       },
 
@@ -106,7 +107,6 @@ router.post("/add_product", async (req, res) => {
       where: { itemID: id }
   });
   
-  console.log('Inventory Item from DB:', inventoryItem);
     if(inventory){
       res.status(200).json({
         status_code: 200,
@@ -124,7 +124,6 @@ router.post("/add_product", async (req, res) => {
 
   router.get("/get_product/:id", async (req, res) => {
     const id = parseInt(req.params.id);
-    console.log(id);
     const inventory = await prisma.inventory.findUnique({
       where: {
         itemID: id,
@@ -144,18 +143,55 @@ router.post("/add_product", async (req, res) => {
       });
     }
   });
-  router.delete("/delete_all", async (req, res) => {
-    const inventory = await prisma.inventory.deleteMany();
+
+  // router.delete("/delete_all", async (req, res) => {
+  //   const inventory = await prisma.inventory.deleteMany();
+  //   if(inventory){
+  //     res.status(200).json({
+  //       status_code: 200,
+  //       message: "All products deleted",
+  //       inventory: inventory,
+  //     });
+  //   } else {
+  //     res.status(200).json({
+  //       status_code: 200,
+  //       message: "No products found",
+  //       inventory: [],
+  //     });
+  //   }
+  // });
+
+  router.put("/checkin/:id", async (req, res) => {
+    const id = parseInt(req.params.id);
+    const pdata = req.body;
+    console.log("This is the data: ", pdata);
+    const inventory = await prisma.inventory.findUnique({
+      where: {
+        itemID: id,
+      },
+    });
     if(inventory){
+      const newQuantity = inventory.itemQuantity + parseInt(pdata.checkInQuantity);
+
+      await prisma.inventory.update({
+        where: {
+          itemID: id, 
+        },
+        data: {
+          itemQuantity: newQuantity
+        },
+  
+      });
+
       res.status(200).json({
         status_code: 200,
-        message: "All products deleted",
+        message: "Product checked in",
         inventory: inventory,
       });
     } else {
       res.status(200).json({
         status_code: 200,
-        message: "No products found",
+        message: "Product not found",
         inventory: [],
       });
     }
