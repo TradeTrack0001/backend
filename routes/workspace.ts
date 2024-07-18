@@ -149,13 +149,14 @@ router.get('/get_workspaces', jwtMiddleware, async (req, res) => {
 
 // Endpoint to add an inventory item to a workspace
 router.post('/add_inventory', jwtMiddleware, async (req, res) => {
-  const { workspaceId, itemName, itemDescription, itemQuantity, itemStatus, itemSize, type, location, checkInDate, checkOutDate } = req.body;
+  const { itemID, workspaceId, itemName, itemDescription, itemQuantity, itemStatus, itemSize, type, location, checkInDate, checkOutDate } = req.body;
   const userId = (req as any).auth.id;
-
+  console.log(workspaceId)
 
   try {
     const newInventory = await prisma.inventory.create({
       data: {
+        itemID,
         itemName,
         itemDescription,
         itemQuantity: parseInt(itemQuantity, 10),
