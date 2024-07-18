@@ -8,7 +8,7 @@ datasource db {
 }
 
 model inventory {
-  itemID          Int       @id
+  itemID          Int       @id @default(autoincrement())
   itemName        String
   itemDescription String
   itemQuantity    Int
@@ -18,7 +18,6 @@ model inventory {
   checkInDate     String
   checkOutDate    String    @default("N/A")
   location        String
-  logs            logs[]
   workspaceId     Int
   workspace       Workspace @relation(fields: [workspaceId], references: [id])
 }
@@ -33,10 +32,9 @@ model employee {
 }
 
 model logs {
-  logId         Int       @id
-  employee      employee  @relation(fields: [employeeId], references: [employeeID])
+  logId         Int      @id
+  employee      employee @relation(fields: [employeeId], references: [employeeID])
   employeeId    Int
-  inventory     inventory @relation(fields: [itemID], references: [itemID])
   itemID        Int
   QuantityTook  Int
   QuantityAdded Int
