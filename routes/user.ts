@@ -35,7 +35,8 @@ router.put("/update_profile",jwtMiddleware, async (req, res) => {
             data: {
                 email: req.body.email,
                 password: req.body.password,
-                // name: req.body.name
+                name: req.body.name,
+                companyEmail: req.body.companyEmail
             }
         }
     );
