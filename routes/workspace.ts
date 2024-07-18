@@ -27,6 +27,38 @@ async function isAdmin(userId: string, workspaceId: number): Promise<boolean> {
   });
   return !!userWorkspace;
 }
+// Create a new workspace
+router.post('/create_workspace', jwtMiddleware, async (req, res) => {
+  const { name } = req.body;
+  const userId = (req as any).auth.id;
+
+  if (!name) {
+    return res.status(400).send('Workspace name is required');
+  }
+
+  try {
+    const newWorkspace = await prisma.workspace.create({
+      data: {
+        name: name,
+        userWorkspaces: {
+          create: {
+            userId: userId,
+            isAdmin: true,
+          },
+        },
+      },
+    });
+
+    res.status(201).json({
+      status_code: 201,
+      message: 'Workspace created',
+      workspace: newWorkspace,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Error creating workspace');
+  }
+});
 
 // Endpoint to invite a user to a workspace
 router.post('/invite', jwtMiddleware, async (req, res) => {
