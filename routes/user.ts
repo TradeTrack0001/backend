@@ -11,7 +11,7 @@ const jwtMiddleware = expressjwt({ secret: key, algorithms: ['HS256'] });
 
 router.get("/get_user",jwtMiddleware, async (req, res) => {
     const id = (req as any).auth.id;
-    console.log("This is the id: ", id);
+    // console.log("This is the id: ", id);
     const users = await prisma.user.findUnique(
         {
             where: {
@@ -22,6 +22,26 @@ router.get("/get_user",jwtMiddleware, async (req, res) => {
     res.json(users);
 })
 
-
-
+router.put("/update_profile",jwtMiddleware, async (req, res) => {
+    try {
+    console.log("This is the body: ", req.body);
+    const id = (req as any).auth.id;
+    console.log("This is the id: ", id);
+    const users = await prisma.user.update(
+        {
+            where: {
+                id: id
+            },
+            data: {
+                email: req.body.email,
+                password: req.body.password,
+                // name: req.body.name
+            }
+        }
+    );
+    res.json(users);
+    } catch (error) {
+        console.log(error);
+    }
+})
 export default router
