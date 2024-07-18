@@ -199,5 +199,21 @@ router.post('/current_workspace', jwtMiddleware, async (req, res) => {
   }
 });
 
+router.get('/workspaces/:workspaceId/inventory', jwtMiddleware, async (req, res) => {
+  const { workspaceId } = req.params;
+
+  try {
+    const inventoryItems = await prisma.inventory.findMany({
+      where: { workspaceId: parseInt(workspaceId, 10) },
+    });
+
+    res.status(200).json({ inventoryItems });
+  } catch (error) {
+    console.error('Error fetching inventory items:', error);
+    res.status(500).send('Error fetching inventory items');
+  }
+});
+
+
 // Export the router
 export default router;
