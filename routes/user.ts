@@ -11,7 +11,7 @@ const jwtMiddleware = expressjwt({ secret: key, algorithms: ['HS256'] });
 
 router.get("/get_user",jwtMiddleware, async (req, res) => {
     const id = (req as any).auth.id;
-    console.log(id);
+    console.log("This is the id: ", id);
     const users = await prisma.user.findUnique(
         {
             where: {
