@@ -152,9 +152,6 @@ router.post('/add_inventory', jwtMiddleware, async (req, res) => {
   const { workspaceId, itemName, itemDescription, itemQuantity, itemStatus, itemSize, type, location, checkInDate, checkOutDate } = req.body;
   const userId = (req as any).auth.id;
 
-  if (!(await isAdmin(userId, workspaceId))) {
-    return res.status(403).send('Only admins can add inventory items to workspaces');
-  }
 
   try {
     const newInventory = await prisma.inventory.create({
@@ -245,6 +242,7 @@ router.get('/workspaces/:workspaceId/inventory', jwtMiddleware, async (req, res)
     res.status(500).send('Error fetching inventory items');
   }
 });
+
 
 
 // Export the router
