@@ -3,7 +3,7 @@ CREATE TYPE "Role" AS ENUM ('USER', 'ADMIN', 'REALTOR');
 
 -- CreateTable
 CREATE TABLE "inventory" (
-    "itemID" SERIAL NOT NULL,
+    "itemID" TEXT NOT NULL,
     "itemName" TEXT NOT NULL,
     "itemDescription" TEXT NOT NULL,
     "itemQuantity" INTEGER NOT NULL,
@@ -45,6 +45,7 @@ CREATE TABLE "User" (
     "id" TEXT NOT NULL,
     "email" TEXT NOT NULL,
     "password" TEXT NOT NULL,
+    "name" TEXT,
     "role" "Role" NOT NULL DEFAULT 'USER',
     "companyEmail" TEXT NOT NULL DEFAULT '',
     "currentWorkspaceId" INTEGER,
