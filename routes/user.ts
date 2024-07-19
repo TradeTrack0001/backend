@@ -1,7 +1,7 @@
 import { Router } from "express";
 import prisma from "../data/prisma.js";
 import { expressjwt } from "express-jwt";
-
+import bcrypt from "bcryptjs";
 const router = Router();
 const key = process.env.SECRET_KEY;
 if (!key) {
@@ -27,6 +27,7 @@ router.put("/update_profile",jwtMiddleware, async (req, res) => {
     console.log("This is the body: ", req.body);
     const id = (req as any).auth.id;
     console.log("This is the id: ", id);
+    const hashedPassword = await bcrypt.hash(req.body.password, 10);
     const users = await prisma.user.update(
         {
             where: {
@@ -34,7 +35,7 @@ router.put("/update_profile",jwtMiddleware, async (req, res) => {
             },
             data: {
                 email: req.body.email,
-                password: req.body.password,
+                password: hashedPassword
                 // name: req.body.name
             }
         }
