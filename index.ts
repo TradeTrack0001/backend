@@ -8,7 +8,7 @@ import authRouter from "./routes/auth.js";
 import bodyParser from "body-parser";
 import workspaceRouter from "./routes/workspace.js";
 const app = express();
-const PORT = 2000;
+const PORT = process.env.PORT || 4000;
 
 
 

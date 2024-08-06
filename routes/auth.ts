@@ -41,6 +41,8 @@ router.post('/register', async (req: Request, res: Response) => {
 // Login route
 router.post('/login', async (req: Request, res: Response) => {
   const { email, password } = req.body;
+  const hashedPassword = await bcrypt.hash(password, 10);
+  console.log(hashedPassword);
   let user = null;
   try {
     user = await prisma.user.findUnique({ where: { email } });
