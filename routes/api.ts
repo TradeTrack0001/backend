@@ -20,7 +20,7 @@ router.post("/add_product", async (req, res) => {
         location: pdata.location,
         itemStatus:pdata.itemStatus,
         itemQuantity: parseInt(pdata.itemQuantity),
-        itemID: parseInt(pdata.itemID),
+        // itemID: parseInt(pdata.itemID),
         type: pdata.type,
         workspaceId: pdata.workspaceId,
       },
@@ -61,7 +61,7 @@ router.post("/add_product", async (req, res) => {
   }
   );
   router.delete("/delete_product/:id", async (req, res) => {
-    const id = parseInt(req.params.id);
+    const id = (req.params.id);
 
     const inventory = await prisma.inventory.delete({
       where: {
@@ -84,7 +84,7 @@ router.post("/add_product", async (req, res) => {
   });
 
   router.put("/update_product/:id", async (req, res) => {
-    const id = parseInt(req.params.id);
+    const id = (req.params.id);
 
     const pdata = req.body;
 
@@ -124,7 +124,7 @@ router.post("/add_product", async (req, res) => {
   });
 
   router.get("/get_product/:id", async (req, res) => {
-    const id = parseInt(req.params.id);
+    const id = (req.params.id);
     const inventory = await prisma.inventory.findUnique({
       where: {
         itemID: id,
@@ -163,7 +163,7 @@ router.post("/add_product", async (req, res) => {
   // });
 
   router.put("/checkin/:id", async (req, res) => {
-    const id = parseInt(req.params.id);
+    const id = (req.params.id);
     const pdata = req.body;
     console.log("This is the data: ", pdata);
     const inventory = await prisma.inventory.findUnique({
@@ -200,7 +200,7 @@ router.post("/add_product", async (req, res) => {
   );
 
   router.put("/checkout/:id", async (req, res) => {
-    const id = parseInt(req.params.id);
+    const id = (req.params.id);
     const pdata = req.body;
     console.log("This is the data: ", pdata);
     const inventory = await prisma.inventory.findUnique({

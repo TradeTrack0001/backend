@@ -8,7 +8,7 @@ datasource db {
 }
 
 model inventory {
-  itemID          Int       @id @default(autoincrement())
+  itemID          String    @id @default(uuid())
   itemName        String
   itemDescription String
   itemQuantity    Int
