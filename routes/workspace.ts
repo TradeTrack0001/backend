@@ -62,6 +62,11 @@ router.post('/create_workspace', jwtMiddleware, async (req, res) => {
 
 // Endpoint to invite a user to a workspace
 router.post('/invite', jwtMiddleware, async (req, res) => {
+  const origin = req.headers.origin || req.headers.referer || 'Origin not found';
+
+  // Log the origin URL
+  console.log('Origin URL:', origin);
+
   const { email, workspaceId } = req.body;
   const userId = (req as any).auth.id;
 
@@ -76,7 +81,7 @@ router.post('/invite', jwtMiddleware, async (req, res) => {
   // Generate an invitation token (e.g., JWT or a unique token)
   const inviteToken = jwt.sign({ email, workspaceId }, SECRET_KEY, { expiresIn: '1d' });
 
-  const inviteLink = `http://localhost:1420/accept-invite?token=${inviteToken}`; // Replace with your actual invite link
+  const inviteLink = `https://tradetrack-8lw.pages.dev/accept-invite?token=${inviteToken}`; // Replace with your actual invite link
 
   // Send the invitation email
   const mailOptions = {
